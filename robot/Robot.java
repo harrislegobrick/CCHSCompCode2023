@@ -42,12 +42,6 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
-    private final SendableChooser<String> m_chooser = new SendableChooser<>();
-    private static final String auto = "Auto";
-    private String[] list = {"Auto"};
-
-    private WPI_TalonFX frontLeft, backLeft, frontRight, backRight;
-    private MotorController left, right;
 
     //timers
     private Timer autoTimer;
@@ -60,11 +54,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer.getInstance();
-        HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         CameraServer.startAutomaticCapture();
-        m_chooser.addOption("Auto", auto);
-        SmartDashboard.putData("Auto Choices", m_chooser);
-        this.autoTimer = new Timer();
     }
 
     /**
@@ -81,10 +71,6 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-        if(isDisabled())
-        {
-            this.autoTimer.reset();
-        }
     }
 
 
@@ -104,23 +90,12 @@ public class Robot extends TimedRobot {
     */
     @Override
     public void autonomousInit() {
-        frontLeft = new WPI_TalonFX(2);
-        frontLeft.setInverted(true);
-        backLeft = new WPI_TalonFX(1);
-        backLeft.setInverted(true);
-        //left = new MotorControllerGroup(frontLeft, backLeft);
-        frontRight = new WPI_TalonFX(4);
-        frontRight.setInverted(false);
-        backRight = new WPI_TalonFX(3);
-        //right = new MotorControllerGroup(frontRight, backRight);
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        m_autonomousCommand = m_robotContainer.getAutonomusCommand();
 
-        // schedule the autonomous command (example)
-        //if (m_autonomousCommand != null) {
-        //    m_autonomousCommand.schedule();
-        //}
-        SmartDashboard.updateValues();
-        SmartDashboard.putStringArray("Auto List", list);
+        // schedule the autonomus ccommand
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+        }
     }
 
     /**
@@ -128,20 +103,6 @@ public class Robot extends TimedRobot {
     */
     @Override
     public void autonomousPeriodic() {
-
-        //ChargeStation DriverStation2
-        String autoName = SmartDashboard.getString("Auto Selecter", "auto");
-        switch(autoName) {
-            case "auto":
-            autoTimer.start();
-            if((autoTimer.get() >= 0.0) && (autoTimer.get() < 2.0))
-            {
-                left.set(0.6);
-                right.set(0.6);
-            }
-            break;
-        }
-        
     }
 
     @Override

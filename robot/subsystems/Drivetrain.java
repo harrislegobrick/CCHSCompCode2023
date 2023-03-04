@@ -104,8 +104,6 @@ differentialDrive.setMaxOutput(1.0);
 
     public void driveAuto(){
         differentialDrive.tankDrive(0.5, 0.5);
-        right.set(0.5);
-        left.set(0.5);
     }
 
     public void leftAuto(){
